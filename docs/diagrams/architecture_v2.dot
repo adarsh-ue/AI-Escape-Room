@@ -1,0 +1,29 @@
+digraph V2 {
+  rankdir=LR; bgcolor="white"; pad=0.3; nodesep=0.45; ranksep=0.6;
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, fillcolor="#EEF2F7", color="#4A5568"];
+  edge [fontname="Helvetica", fontsize=9, color="#4A5568"];
+  label="Version 2 - Python engine decides, LLM understands and narrates"; labelloc=t; fontname="Helvetica-Bold"; fontsize=14;
+
+  player [label="Player", shape=ellipse, fillcolor="#FFF7E0"];
+  ui     [label="Streamlit UI\napp_v2.py\n(chat, real state, debug)"];
+  rules  [label="Rule parser\n(regex, no API call)", shape=diamond, fillcolor="#F7FAFC"];
+  lparse [label="LLM parser\nGemini\n(sees object names only)", fillcolor="#E6F4EA", color="#2F855A"];
+  engine [label="Game engine\nescape_room/v2/engine.py\nvalidators + game_state", fillcolor="#E2E8F0", color="#2B6CB0", penwidth=2];
+  room   [label="config/room.json\ncodes, locks, hints\n(read only by Python)", shape=cylinder, fillcolor="#EBF4FF", color="#2B6CB0"];
+  narr   [label="LLM narrator\nGemini\n(facts + public status)", fillcolor="#E6F4EA", color="#2F855A"];
+  guard  [label="Guard\nnew digits?\nfalse escape?", shape=diamond, fillcolor="#F7FAFC"];
+  facts  [label="Plain facts\n(fallback)", fillcolor="#FFFFFF"];
+
+  player -> ui    [label="natural language"];
+  ui -> rules     [label="player message"];
+  rules -> engine [label="Action"];
+  rules -> lparse [label="unclear text"];
+  lparse -> engine[label="Action JSON"];
+  room -> engine  [color="#2B6CB0"];
+  engine -> narr  [label="Result:\nok, event, facts"];
+  narr -> guard;
+  guard -> ui     [label="safe narration"];
+  guard -> facts  [label="unsafe /\nAPI error"];
+  facts -> ui;
+  engine -> ui    [label="real state\n(inventory, puzzles, locks)", style=dashed, color="#2B6CB0", fontcolor="#2B6CB0"];
+}

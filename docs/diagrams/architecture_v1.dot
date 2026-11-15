@@ -1,0 +1,19 @@
+digraph V1 {
+  rankdir=LR; bgcolor="white"; pad=0.3; nodesep=0.5; ranksep=0.7;
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, fillcolor="#EEF2F7", color="#4A5568"];
+  edge [fontname="Helvetica", fontsize=9, color="#4A5568"];
+  label="Version 1 - LLM as Game Master and game engine"; labelloc=t; fontname="Helvetica-Bold"; fontsize=14;
+
+  player [label="Player", shape=ellipse, fillcolor="#FFF7E0"];
+  ui     [label="Streamlit UI\napp_v1.py\n(chat, sidebar, restart)"];
+  game   [label="GameV1\nescape_room/v1/game.py\n(chat history)"];
+  room   [label="config/room.json\nobjects, codes,\nsolutions, hints", shape=cylinder, fillcolor="#FDECEC", color="#C53030"];
+  llm    [label="Gemini 3.1 Flash-Lite\n(decides outcomes\nand tracks state)", fillcolor="#E6F4EA", color="#2F855A"];
+
+  player -> ui   [label="natural language"];
+  ui -> game     [label="player message"];
+  room -> game   [label="whole file incl. secrets\n-> system prompt", color="#C53030", fontcolor="#C53030"];
+  game -> llm    [label="system prompt +\nfull chat history"];
+  llm -> game    [label="JSON: narration, inventory,\nsolved, escaped"];
+  game -> ui     [label="narration +\nLLM-reported state"];
+}
