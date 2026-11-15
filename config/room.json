@@ -1,0 +1,90 @@
+{
+  "title": "The Locked Library",
+  "intro": "You wake up on a cold wooden floor. Dust hangs in the lamplight. Tall shelves, a heavy oak desk, an old portrait, a silent grandfather clock - and a steel door with a glowing keypad. The door is locked. Somewhere in this library is the way out.",
+  "instructions": [
+    "Type what you want to do in plain English, e.g. \"examine the desk\", \"take the key\" or \"enter 1234 on the drawer\".",
+    "Look closely at everything - clues build on each other.",
+    "Pick up items you find; you can only use items in your inventory.",
+    "Stuck? Ask for a hint.",
+    "Use the Restart button in the sidebar to start over."
+  ],
+  "objects": {
+    "desk": {
+      "aliases": ["table", "oak desk", "papers", "desk papers"],
+      "description": "a heavy oak desk covered in papers",
+      "examine": "Among the papers lies a handwritten note.",
+      "reveals": ["note"]
+    },
+    "bookshelf": {
+      "aliases": ["shelf", "shelves", "bookcase", "books", "coloured books", "colored books", "spines", "book spines"],
+      "description": "a tall bookshelf full of dusty leather books",
+      "examine": "Four books have coloured spines, each with a single handwritten number: green 5, red 2, yellow 9, blue 6."
+    },
+    "drawer": {
+      "aliases": ["desk drawer", "locked drawer", "combination lock"],
+      "description": "a drawer in the desk with a 4-digit combination lock",
+      "lock": {"type": "code", "code": "2956"},
+      "examine_locked": "The drawer is shut tight by a 4-digit combination lock.",
+      "unlock_text": "The lock clicks and the drawer slides open. Inside are a small brass key and a magnifying glass.",
+      "examine": "The drawer is open.",
+      "reveals": ["brass key", "magnifying glass"],
+      "solves": "bookshelf_code"
+    },
+    "painting": {
+      "aliases": ["portrait", "picture", "frame", "librarian", "old portrait"],
+      "description": "a portrait of a stern old librarian in a gilded frame",
+      "examine": "Near the bottom corner there is some writing, far too small to read with the naked eye.",
+      "examine_with": {
+        "item": "magnifying glass",
+        "text": "Through the magnifying glass the tiny writing reads: 'Time remembers the code.'",
+        "solves": "painting_message"
+      }
+    },
+    "clock": {
+      "aliases": ["grandfather clock", "clock case", "case", "old clock"],
+      "description": "a tall grandfather clock with a locked glass case",
+      "lock": {"type": "item", "item": "brass key"},
+      "examine_locked": "The clock is not ticking. Its glass case is locked and has a small brass keyhole.",
+      "unlock_text": "The brass key turns and the case swings open. The clock hands are frozen at exactly 4:18.",
+      "examine": "The case is open. The clock hands are frozen at exactly 4:18.",
+      "solves": "clock_time"
+    },
+    "door": {
+      "aliases": ["exit", "keypad", "steel door", "exit door", "exit door keypad"],
+      "description": "a steel door with a glowing 4-digit keypad - the only exit",
+      "lock": {"type": "code", "code": "0418", "requires_solved": ["clock_time"]},
+      "examine_locked": "A heavy steel door. The keypad beside it waits for a 4-digit code.",
+      "unlock_text": "The keypad flashes green, the bolts slide back and the door swings open. Fresh air rushes in - you are free!",
+      "final": true
+    }
+  },
+  "items": {
+    "note": {
+      "aliases": ["handwritten note", "letter"],
+      "description": "The note reads: 'Read the spines in the order of the rainbow.'"
+    },
+    "brass key": {
+      "aliases": ["key", "small key", "small brass key"],
+      "description": "A small brass key, the kind that fits a delicate lock."
+    },
+    "magnifying glass": {
+      "aliases": ["magnifier", "lens", "glass"],
+      "description": "A magnifying glass with a worn wooden handle."
+    }
+  },
+  "puzzles": {
+    "bookshelf_code": "Bookshelf colour code",
+    "painting_message": "Painting's hidden message",
+    "clock_time": "The frozen clock"
+  },
+  "hints": [
+    {"unless": "examined:desk", "text": "The desk looks like someone left in a hurry. Maybe start there."},
+    {"unless": "examined:bookshelf", "text": "The note talks about spines. Which piece of furniture has spines?"},
+    {"unless": "unlocked:drawer", "text": "Rainbow order: red, orange, yellow, green, blue... Read the book numbers in that order."},
+    {"unless": "has:magnifying glass", "text": "The open drawer holds things worth taking with you."},
+    {"unless": "has:brass key", "text": "The open drawer holds things worth taking with you."},
+    {"unless": "solved:painting_message", "text": "The portrait has writing too small to read. Something in your inventory could help."},
+    {"unless": "unlocked:clock", "text": "That small brass keyhole on the clock looks familiar."},
+    {"unless": "unlocked:door", "text": "The clock stopped at a very specific time. The keypad wants four digits."}
+  ]
+}
