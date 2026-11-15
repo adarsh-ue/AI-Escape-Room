@@ -1,8 +1,19 @@
-# Secrets
+# Secrets - never commit real keys
 .env
+.env.*
+!.env.example
+.streamlit/secrets.toml
 
 # Python / environments
 .venv/
+venv/
 __pycache__/
 *.pyc
+.pytest_cache/
 .ipynb_checkpoints/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
